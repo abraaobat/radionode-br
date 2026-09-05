@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Build / generated artifacts
+build/
+dist/
+out/
+.tmp/
+.cache/
+
+# Logs
+*.log
+
+# Python helpers that may be used by tooling
+__pycache__/
+*.py[cod]
+.venv/
+
+# PlatformIO / embedded tooling when adopted
+.pio/
