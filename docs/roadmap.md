@@ -10,7 +10,7 @@ Este roadmap organiza a evolução do projeto sem antecipar decisões de hardwar
 - [x] criar arquitetura canônica
 - [x] criar roadmap e ADR inicial
 - [x] adicionar versionamento e changelog
-- [ ] definir licença open source do projeto
+- [x] definir licença open source do projeto (Apache-2.0)
 - [ ] configurar About/topics do GitHub
 
 ## F1 — Core interfaces and bench plan
