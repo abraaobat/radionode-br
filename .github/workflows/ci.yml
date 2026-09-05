@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate canonical repository files
+        shell: bash
+        run: |
+          set -euo pipefail
+          required=(
+            README.md
+            VERSION
+            CHANGELOG.md
+            CONTRIBUTING.md
+            SECURITY.md
+            docs/architecture.md
+            docs/roadmap.md
+            docs/decisions/ADR-0001-system-boundaries.md
+          )
+
+          for file in "${required[@]}"; do
+            test -f "$file" || { echo "Missing required file: $file"; exit 1; }
+          done
+
+      - name: Validate version format
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(tr -d '\n\r' < VERSION)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]] || {
+            echo "VERSION is not valid SemVer: $version"
+            exit 1
+          }
