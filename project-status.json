@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "projectId": "radionode-br",
+  "updatedAt": "2026-09-08T22:45:00-04:00",
+  "status": "Bootstrap / arquitetura em validação",
+  "statusClass": "validate",
+  "progress": 22,
+  "roadmap": "0.1.0-alpha.0 • multimodo",
+  "current": "A arquitetura multimodo, transportes e hardware de referência seguem em validação; VHF/UHF AX.25/KISS/APRS, DMR, LoRa/Meshtastic e IP são tratados como transportes distintos sobre um núcleo comum.",
+  "architecture": "RadioNode Core → VHF/UHF AX.25/KISS/APRS | DMR Data/SMS | LoRa/Meshtastic | IP → apps/TAK/gateways",
+  "next": "Validar primeiro caminho de hardware VHF/UHF + AX.25/KISS/APRS com uma RadioNode Box experimental ou rádio Native KISS antes de avançar para PCB própria.",
+  "action": "Provar um caminho de RF real ponta a ponta e registrar a matriz de hardware validada.",
+  "subprojects": [
+    "RadioNode Core",
+    "VHF/UHF AX.25/KISS/APRS",
+    "Native KISS radios",
+    "DMR transport",
+    "LoRa/Meshtastic",
+    "RadioNode Box",
+    "TAK/CoT futuro"
+  ],
+  "activity": {
+    "date": "2026-09-08",
+    "type": "architecture",
+    "text": "RadioNode-BR publishes its machine-readable project status from the canonical repository; the platform remains in multimode architecture and hardware validation."
+  }
+}
