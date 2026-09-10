@@ -72,3 +72,19 @@ jobs:
       - name: Compile pinned AFSK candidate for ESP32-S3
         working-directory: validation/esp32-afsk-s3-smoke
         run: pio run -e esp32-s3-devkitc-1
+
+  ptt-safety-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RadioNode BR
+        uses: actions/checkout@v4
+
+      - name: Compile PTT fail-safe tests
+        working-directory: validation/ptt-safety-native
+        run: >-
+          g++ -std=c++20 -Wall -Wextra -Werror -pedantic
+          test_ptt_safety.cpp -o test_ptt_safety
+
+      - name: Run PTT fail-safe tests
+        working-directory: validation/ptt-safety-native
+        run: ./test_ptt_safety

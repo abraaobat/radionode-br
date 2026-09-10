@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
   "projectId": "radionode-br",
-  "updatedAt": "2026-09-09T23:20:00-04:00",
-  "status": "MVP AFSK • software validado",
+  "updatedAt": "2026-09-10T19:15:00-04:00",
+  "status": "MVP AFSK + PTT safety • software validado",
   "statusClass": "validate",
-  "progress": 28,
+  "progress": 32,
   "roadmap": "0.1.0-alpha.0 • F4 RadioNode Box",
-  "current": "O candidato dkaukov/esp32-afsk está pinado e passou em CI nos testes nativos upstream de modulação/demodulação e em um compile/API smoke do RadioNode para ESP32-S3. O harness não toca GPIO, PTT ou RF, portanto esta validação prova compatibilidade de software/toolchain, não funcionamento físico de rádio.",
-  "architecture": "Rádio VHF/UHF ↔ áudio/PTT ↔ ESP32-S3/RadioNode Box ↔ esp32-afsk ↔ AX.25 ↔ KISS ↔ BLE/USB ↔ RadioLink Mobile",
-  "next": "Executar a sequência física segura: fixture/áudio no ESP32-S3 real → validar TX em caminho de áudio sem RF → integrar PTT fail-safe → RX/TX simplex de bancada → KISS USB/BLE.",
-  "action": "Passar do CI para bancada sem pular etapas: áudio RX conhecido → TX sem RF → PTT seguro → simplex → KISS host.",
+  "current": "O candidato dkaukov/esp32-afsk segue pinado e validado em CI nos testes nativos upstream e compile/API smoke para ESP32-S3. O RadioNode agora também possui uma máquina de estados PTT fail-safe determinística, testada nativamente: timeout máximo deschaveia logicamente e trava em fault, re-key não estende a janela e wraparound de millis é coberto. Nenhum GPIO/PTT/RF físico foi acionado.",
+  "architecture": "Rádio VHF/UHF ↔ áudio/PTT com fail-safe ↔ ESP32-S3/RadioNode Box ↔ esp32-afsk ↔ AX.25 ↔ KISS ↔ BLE/USB ↔ RadioLink Mobile",
+  "next": "Executar a sequência física segura: fixture/áudio no ESP32-S3 real → validar TX em caminho de áudio sem RF → mapear o PTT fail-safe ao GPIO e medir de-key físico → RX/TX simplex de bancada → KISS USB/BLE.",
+  "action": "Passar do CI para bancada sem pular etapas: áudio RX conhecido → TX sem RF → PTT físico seguro → simplex → KISS host.",
   "subprojects": [
     "RadioNode Core",
     "VHF/UHF AX.25/KISS/APRS",
     "esp32-afsk native tests ✓",
     "ESP32-S3 compile smoke ✓",
+    "PTT fail-safe state machine ✓",
     "Audio fixture on physical ESP32-S3",
-    "PTT fail-safe",
+    "Physical PTT/GPIO validation",
     "KISS USB/BLE",
-    "Native KISS radios",
     "DMR / LoRa future transports"
   ],
   "activity": {
-    "date": "2026-09-09",
-    "type": "validation",
-    "text": "Pinned esp32-afsk passed its upstream native test suite and a RadioNode-owned ESP32-S3 compile/API smoke harness in CI; physical audio/PTT/RF remains explicitly unvalidated."
+    "date": "2026-09-10",
+    "type": "safety-validation",
+    "text": "A platform-neutral PTT timeout/fault-latch state machine was added and native-CI validated while keeping GPIO, physical PTT and RF validation as explicit bench gates."
   }
 }
