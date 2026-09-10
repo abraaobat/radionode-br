@@ -43,3 +43,32 @@ jobs:
             echo "VERSION is not valid SemVer: $version"
             exit 1
           }
+
+  afsk-upstream-native:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install PlatformIO
+        run: python -m pip install --upgrade platformio
+
+      - name: Checkout pinned esp32-afsk candidate
+        run: |
+          git clone https://github.com/dkaukov/esp32-afsk.git esp32-afsk
+          cd esp32-afsk
+          git checkout e771c98d08fa5e98d5481e5d8e48601631891d57
+
+      - name: Run upstream native AFSK tests
+        working-directory: esp32-afsk
+        run: pio test -e native
+
+  afsk-esp32-s3-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout RadioNode BR
+        uses: actions/checkout@v4
+
+      - name: Install PlatformIO
+        run: python -m pip install --upgrade platformio
+
+      - name: Compile pinned AFSK candidate for ESP32-S3
+        working-directory: validation/esp32-afsk-s3-smoke
+        run: pio run -e esp32-s3-devkitc-1
