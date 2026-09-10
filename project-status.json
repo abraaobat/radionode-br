@@ -1,18 +1,19 @@
 {
   "schemaVersion": 1,
   "projectId": "radionode-br",
-  "updatedAt": "2026-09-08T22:45:00-04:00",
-  "status": "Bootstrap / arquitetura em validação",
+  "updatedAt": "2026-09-09T22:35:00-04:00",
+  "status": "MVP AFSK definido • validação pendente",
   "statusClass": "validate",
-  "progress": 22,
-  "roadmap": "0.1.0-alpha.0 • multimodo",
-  "current": "A arquitetura multimodo, transportes e hardware de referência seguem em validação; VHF/UHF AX.25/KISS/APRS, DMR, LoRa/Meshtastic e IP são tratados como transportes distintos sobre um núcleo comum.",
-  "architecture": "RadioNode Core → VHF/UHF AX.25/KISS/APRS | DMR Data/SMS | LoRa/Meshtastic | IP → apps/TAK/gateways",
-  "next": "Validar primeiro caminho de hardware VHF/UHF + AX.25/KISS/APRS com uma RadioNode Box experimental ou rádio Native KISS antes de avançar para PCB própria.",
-  "action": "Provar um caminho de RF real ponta a ponta e registrar a matriz de hardware validada.",
+  "progress": 24,
+  "roadmap": "0.1.0-alpha.0 • F4 RadioNode Box",
+  "current": "A arquitetura multimodo permanece válida e o caminho AFSK do MVP foi concretizado: dkaukov/esp32-afsk é o candidato principal para validação do modem AFSK 1200 no ESP32-S3, mantendo KISS como contrato com o host. A dependência GPL-3.0 permanece externamente identificada e não é tratada como código Apache-2.0 do RadioNode.",
+  "architecture": "Rádio VHF/UHF ↔ áudio/PTT ↔ ESP32-S3/RadioNode Box ↔ esp32-afsk ↔ AX.25 ↔ KISS ↔ BLE/USB ↔ RadioLink Mobile",
+  "next": "Executar testes nativos/fixtures do upstream, validar build no ESP32-S3 e TX em caminho de áudio de teste antes de qualquer keying RF; depois validar RX/TX simplex e KISS USB/BLE.",
+  "action": "Validar o candidato AFSK em sequência segura: fixture RX → TX áudio sem RF → bancada rádio/PTT → KISS host.",
   "subprojects": [
     "RadioNode Core",
     "VHF/UHF AX.25/KISS/APRS",
+    "esp32-afsk MVP candidate",
     "Native KISS radios",
     "DMR transport",
     "LoRa/Meshtastic",
@@ -20,8 +21,8 @@
     "TAK/CoT futuro"
   ],
   "activity": {
-    "date": "2026-09-08",
-    "type": "architecture",
-    "text": "RadioNode-BR publishes its machine-readable project status from the canonical repository; the platform remains in multimode architecture and hardware validation."
+    "date": "2026-09-09",
+    "type": "decision",
+    "text": "ADR-0003 adopts dkaukov/esp32-afsk as the primary AFSK MVP candidate while preserving a clear GPL-3.0/Apache-2.0 licensing boundary and physical validation gates."
   }
 }
