@@ -2,6 +2,10 @@
 
 Este roadmap organiza a evolução do projeto como uma plataforma multimodo, sem amarrar o núcleo a um único rádio, protocolo ou rede.
 
+## Estado atual — 2026-09-10
+
+O núcleo AFSK candidato (`dkaukov/esp32-afsk`) já passa testes nativos upstream e build ESP32-S3 no CI. A camada lógica de segurança de PTT também está implementada e testada: timeout máximo de TX, fault latch, limpeza explícita e tratamento de wraparound de `millis()`. O próximo gate continua sendo físico: áudio RX/TX + PTT GPIO + AFSK real em bancada antes de promover o RadioNode Box como validado.
+
 ## F0 — Foundation 🟡
 
 - [x] criar repositório público
@@ -54,23 +58,30 @@ Objetivo: primeiro transporte funcional e interoperável.
 - validar Bluetooth SPP/BLE conforme cada rádio
 - testar interoperabilidade RF entre marcas/modelos
 
-## F4 — RadioNode Box / legacy radio adapter
+## F4 — RadioNode Box / legacy radio adapter 🟡
 
 Objetivo: permitir que rádios analógicos sem TNC participem do mesmo ecossistema.
 
-- Quansheng K1/K5 como plataforma inicial de bancada
-- ESP32 para bridge local
-- interface de áudio RX/TX
-- PTT fail-safe
-- timeout máximo de TX
-- modem AFSK 1200
-- AX.25/KISS
-- Bluetooth/BLE
-- GPS do celular como baseline
-- GNSS externo opcional
-- protótipo sem PCB própria
-- definir conectores/cabos substituíveis por família de rádio
-- somente depois avaliar PCB e enclosure próprios
+- [x] Quansheng K1/K5 definido como plataforma inicial de bancada
+- [x] ESP32-S3 definido como bridge local do MVP
+- [ ] interface física de áudio RX/TX validada
+- [x] PTT fail-safe implementado e validado em software
+- [x] timeout máximo de TX implementado e validado em software
+- [x] `dkaukov/esp32-afsk` adotado e fixado como candidato principal do núcleo AFSK
+- [x] testes nativos upstream do AFSK passam no CI
+- [x] candidato AFSK compila para ESP32-S3 no CI
+- [ ] RX AFSK 1200 real validado em bancada
+- [ ] TX AFSK 1200 real validado em bancada
+- [ ] PTT GPIO físico validado com fail-safe e timeout
+- [ ] AX.25/KISS integrado ao firmware do RadioNode Box
+- [ ] Bluetooth/BLE KISS
+- [x] GPS do celular definido como baseline
+- [ ] GNSS externo opcional
+- [ ] protótipo sem PCB própria montado e validado
+- [ ] definir conectores/cabos substituíveis por família de rádio
+- [ ] somente depois avaliar PCB e enclosure próprios
+
+**Gate de promoção de F4:** software/CI não substitui bancada. F4 só avança para validação funcional após prova documentada de RX + TX AFSK e desacionamento físico seguro do PTT.
 
 ## F5 — LoRa / Meshtastic transport
 
