@@ -1,29 +1,32 @@
 {
   "schemaVersion": 1,
   "projectId": "radionode-br",
-  "updatedAt": "2026-09-10T19:15:00-04:00",
-  "status": "MVP AFSK + PTT safety • software validado",
+  "updatedAt": "2026-09-12T11:13:00-04:00",
+  "status": "MVP AFSK + PTT safety • A11Y arquitetada",
   "statusClass": "validate",
-  "progress": 32,
-  "roadmap": "0.1.0-alpha.0 • F4 RadioNode Box",
-  "current": "O candidato dkaukov/esp32-afsk segue pinado e validado em CI nos testes nativos upstream e compile/API smoke para ESP32-S3. O RadioNode agora também possui uma máquina de estados PTT fail-safe determinística, testada nativamente: timeout máximo deschaveia logicamente e trava em fault, re-key não estende a janela e wraparound de millis é coberto. Nenhum GPIO/PTT/RF físico foi acionado.",
-  "architecture": "Rádio VHF/UHF ↔ áudio/PTT com fail-safe ↔ ESP32-S3/RadioNode Box ↔ esp32-afsk ↔ AX.25 ↔ KISS ↔ BLE/USB ↔ RadioLink Mobile",
-  "next": "Executar a sequência física segura: fixture/áudio no ESP32-S3 real → validar TX em caminho de áudio sem RF → mapear o PTT fail-safe ao GPIO e medir de-key físico → RX/TX simplex de bancada → KISS USB/BLE.",
-  "action": "Passar do CI para bancada sem pular etapas: áudio RX conhecido → TX sem RF → PTT físico seguro → simplex → KISS host.",
+  "progress": 33,
+  "roadmap": "0.1.0-alpha.0 • F4 RadioNode Box + A11Y",
+  "current": "O candidato dkaukov/esp32-afsk segue pinado e validado em CI nos testes nativos upstream e compile/API smoke para ESP32-S3, com máquina de estados PTT fail-safe determinística já validada em software. Em paralelo, acessibilidade foi formalizada como capacidade transversal: ADR-0004 e docs/accessibility.md definem operação screenless, eventos semânticos, fala I2S, Morse, feedback tonal, prioridades e integração futura com RadioLink Mobile. O projeto jewelux/talking-swr-meter-LX1WJ foi adotado como referência arquitetural, sem incorporação automática do código GPL-3.0.",
+  "architecture": "Rádio VHF/UHF ↔ áudio/PTT com fail-safe ↔ ESP32-S3/RadioNode Box ↔ esp32-afsk ↔ AX.25 ↔ KISS ↔ BLE/USB ↔ RadioLink Mobile; eventos semânticos → Accessibility Engine → fala/Morse/tons/host accessibility",
+  "next": "Executar a sequência física segura de F4: fixture/áudio no ESP32-S3 real → validar TX em caminho de áudio sem RF → mapear o PTT fail-safe ao GPIO e medir de-key físico → RX/TX simplex de bancada → KISS USB/BLE. Em paralelo, após F1 fechar o modelo de eventos, definir o contrato AccessibilityEvent e prototipar saída I2S sem interferir nos caminhos críticos.",
+  "action": "Prioridade imediata continua sendo bancada F4; A11Y avança em paralelo apenas onde não depende do hardware RF: contrato de eventos, vocabulário pt-BR e desenho do protótipo I2S.",
   "subprojects": [
     "RadioNode Core",
     "VHF/UHF AX.25/KISS/APRS",
     "esp32-afsk native tests ✓",
     "ESP32-S3 compile smoke ✓",
     "PTT fail-safe state machine ✓",
+    "Accessibility Engine architecture ✓",
+    "ADR-0004 accessibility ✓",
     "Audio fixture on physical ESP32-S3",
     "Physical PTT/GPIO validation",
     "KISS USB/BLE",
+    "A11Y I2S/Morse prototype",
     "DMR / LoRa future transports"
   ],
   "activity": {
-    "date": "2026-09-10",
-    "type": "safety-validation",
-    "text": "A platform-neutral PTT timeout/fault-latch state machine was added and native-CI validated while keeping GPIO, physical PTT and RF validation as explicit bench gates."
+    "date": "2026-09-12",
+    "type": "architecture",
+    "text": "Accessibility was promoted to a first-class cross-cutting capability. LX1WJ was adopted as a screenless interaction reference, with an explicit GPL/Apache boundary, dedicated ADR, technical design and roadmap track."
   }
 }
