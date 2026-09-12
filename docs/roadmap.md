@@ -2,9 +2,11 @@
 
 Este roadmap organiza a evolução do projeto como uma plataforma multimodo, sem amarrar o núcleo a um único rádio, protocolo ou rede.
 
-## Estado atual — 2026-09-10
+## Estado atual — 2026-09-12
 
 O núcleo AFSK candidato (`dkaukov/esp32-afsk`) já passa testes nativos upstream e build ESP32-S3 no CI. A camada lógica de segurança de PTT também está implementada e testada: timeout máximo de TX, fault latch, limpeza explícita e tratamento de wraparound de `millis()`. O próximo gate continua sendo físico: áudio RX/TX + PTT GPIO + AFSK real em bancada antes de promover o RadioNode Box como validado.
+
+Em paralelo, acessibilidade passa a ser uma capacidade transversal de primeira classe. O `jewelux/talking-swr-meter-LX1WJ` foi adotado como referência arquitetural para operação screenless com fala, Morse e feedback tonal. O desenho está registrado em `docs/accessibility.md` e no ADR-0004. Essa trilha não altera nem bloqueia o gate físico de F4.
 
 ## F0 — Foundation 🟡
 
@@ -17,6 +19,7 @@ O núcleo AFSK candidato (`dkaukov/esp32-afsk`) já passa testes nativos upstrea
 - [x] definir licença open source do projeto (Apache-2.0)
 - [x] adotar arquitetura multimodo com VHF/AX.25, DMR e LoRa/Meshtastic como transportes de primeira classe
 - [x] separar RadioNode Core, transports, drivers e hardware adapters
+- [x] definir acessibilidade como capacidade transversal e registrar ADR específico
 - [ ] configurar About/topics do GitHub
 
 ## F1 — Core contracts and message model
@@ -29,6 +32,7 @@ O núcleo AFSK candidato (`dkaukov/esp32-afsk`) já passa testes nativos upstrea
 - definir interface `Core ↔ Transport`
 - definir interface `Transport ↔ Driver`
 - definir versionamento dos contratos
+- definir contrato de eventos semânticos consumível pelo Accessibility Engine
 - registrar formato canônico em ADR após testes
 
 ## F2 — VHF/UHF AX.25/KISS baseline
@@ -79,9 +83,35 @@ Objetivo: permitir que rádios analógicos sem TNC participem do mesmo ecossiste
 - [ ] GNSS externo opcional
 - [ ] protótipo sem PCB própria montado e validado
 - [ ] definir conectores/cabos substituíveis por família de rádio
+- [ ] revisar disponibilidade de I2S/GPIO para perfil acessível opcional sem comprometer áudio/PTT
 - [ ] somente depois avaliar PCB e enclosure próprios
 
 **Gate de promoção de F4:** software/CI não substitui bancada. F4 só avança para validação funcional após prova documentada de RX + TX AFSK e desacionamento físico seguro do PTT.
+
+## A11Y — Accessibility Engine / operação screenless 🟡
+
+Trilha transversal. Pode evoluir em paralelo às fases principais e não bloqueia a validação física de F4.
+
+- [x] adotar `jewelux/talking-swr-meter-LX1WJ` como referência arquitetural de acessibilidade
+- [x] documentar fronteira de licença: referência de padrões sem incorporação automática do código GPL-3.0
+- [x] definir Accessibility Engine separado de transport/modem/RF
+- [x] documentar fala, Morse, tons e acessibilidade no host como modalidades complementares
+- [x] definir `pt-BR` como perfil inicial de localização
+- [x] estabelecer princípio screenless-first para funções essenciais selecionadas
+- [ ] fechar contrato `AccessibilityEvent` após F1 definir o modelo comum de eventos
+- [ ] implementar prioridade `critical / operational / informational`
+- [ ] implementar cancelamento, interrupção, deduplicação e rate limiting
+- [ ] criar vocabulário offline `pt-BR` inicial
+- [ ] prototipar saída I2S com MAX98357A ou equivalente
+- [ ] prototipar Morse/buzzer
+- [ ] validar feedback tonal para eventos contínuos apropriados
+- [ ] expor os mesmos eventos ao RadioLink Mobile para VoiceOver/TalkBack e haptics
+- [ ] criar controles físicos mínimos: repetir status, cancelar fala e volume/modo de feedback
+- [ ] validar que áudio acessível não interfere em AFSK, watchdog, PTT fail-safe ou timeout de TX
+- [ ] executar roteiro de operação eyes-free
+- [ ] realizar, quando possível, avaliação com operador cego ou com baixa visão
+
+**Critério de promoção da trilha A11Y:** acessibilidade deve ser validada por tarefas executáveis sem display e sem degradação dos caminhos críticos de RF/segurança; existência de TTS ou buzzer no código, isoladamente, não conta como validação funcional.
 
 ## F5 — LoRa / Meshtastic transport
 
@@ -195,6 +225,7 @@ Objetivo: nó fixo capaz de interligar transportes de forma explícita e control
 - testes de interoperabilidade entre modelos de rádio
 - operação controlada em RF respeitando regulamentação e licenciamento
 - documentar problemas conhecidos e recuperação
+- incluir cenários eyes-free aplicáveis ao perfil acessível
 
 ## F14 — Reference hardware
 
@@ -203,6 +234,7 @@ Objetivo: nó fixo capaz de interligar transportes de forma explícita e control
 - revisar alimentação e proteção
 - revisar áudio/PTT/COS/COR
 - revisar conectores e manutenção
+- definir variante/perfil acessível opcional com I2S/alto-falante/buzzer após validação de recursos
 - avaliar RadioNode Link para DMR
 - avaliar RadioNode Gateway hardware profile
 - somente então avaliar PCB própria por produto
@@ -215,6 +247,7 @@ Objetivo: nó fixo capaz de interligar transportes de forma explícita e control
 - documentação por transport
 - exemplos de configuração
 - documentação de segurança e limitações
+- guia de acessibilidade e operação sem tela para perfis suportados
 - CI adequado ao firmware/software existente
 - releases versionadas
 - critérios para `v1.0.0`
@@ -232,6 +265,13 @@ Objetivo: nó fixo capaz de interligar transportes de forma explícita e control
 | DigiPi + Dire Wolf | gateway KISS/Linux |
 | Meshtastic/LoRa | transporte mesh de baixa potência |
 
+## Referências arquiteturais selecionadas
+
+| Referência | Uso no RadioNode BR |
+|---|---|
+| `dkaukov/esp32-afsk` | candidato principal do modem AFSK 1200 do MVP, sujeito ao gate físico e à fronteira GPL |
+| `jewelux/talking-swr-meter-LX1WJ` | referência de interação acessível screenless: fala, Morse, feedback tonal e controles físicos |
+
 ## Regra de promoção de fase
 
-Uma fase só é considerada concluída quando os artefatos aplicáveis estiverem documentados, testados e registrados no Git. Hardware, compatibilidade de rádio ou comportamento de RF não deve ser marcado como validado apenas por documentação do fabricante ou implementação de software.
+Uma fase só é considerada concluída quando os artefatos aplicáveis estiverem documentados, testados e registrados no Git. Hardware, compatibilidade de rádio, acessibilidade ou comportamento de RF não deve ser marcado como validado apenas por documentação do fabricante, existência de código ou implementação de software.
